@@ -1,11 +1,6 @@
 function stringManipulation(word) {
-  if (
-    word[0] == "a" ||
-    word[0] == "i" ||
-    word[0] == "u" ||
-    word[0] == "e" ||
-    word[0] == "o"
-  ) {
+    const vowels = 'aiueoAIUEO'
+  if (vowels.includes(word[0])) {
     return word;
   } else {
     const str = word.split("");
