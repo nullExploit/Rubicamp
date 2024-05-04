@@ -7,10 +7,10 @@ function sentenceManipulation(sentence) {
       const str = word.split("");
       const firstEl = str.shift();
       str.push(firstEl);
-      return str.join("") + "nyo";
+      console.log(str.join("") + "nyo");
     }
   });
-  return sen.join(" ");
+  console.log(sen.join(" "));
 }
 
 sentenceManipulation("ibu pergi ke pasar bersama aku");

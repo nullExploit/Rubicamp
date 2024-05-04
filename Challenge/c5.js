@@ -1,12 +1,12 @@
 function stringManipulation(word) {
-    const vowels = 'aiueoAIUEO'
+  const vowels = "aiueoAIUEO";
   if (vowels.includes(word[0])) {
-    return word;
+    console.log(word);
   } else {
     const str = word.split("");
     const firstEl = str.shift();
     str.push(firstEl);
-    return str.join("") + "nyo";
+    console.log(str.join("") + "nyo");
   }
 }
 
