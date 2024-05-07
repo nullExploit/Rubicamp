@@ -22,7 +22,7 @@ rl = readline.createInterface({
 rl.prompt()
 
 rl.on('line', (line) => {
-    console.log(`${sentenceManipulation(line)}`)
+    console.log(`hasil konversi: ${sentenceManipulation(line)}`)
     rl.prompt() 
 }).on('close', () => {
     console.log("Good bye!")
