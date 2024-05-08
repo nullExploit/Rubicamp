@@ -35,9 +35,9 @@ Gunakan 'skip' untuk menangguhkan pertanyaannya, dan di akhir pertanyaan akan di
             index++;
             console.log(`Pertanyaan: ${datas[index].definition}`);
           }
-        } else if (ans.toLowerCase() == "skip") {
-          datas.push(datas.splice(index, 1)[0]);
+        } else if (ans.toLowerCase() === "skip") {
           datas[index].mistake = 0;
+          datas.push(datas.splice(index, 1)[0]);
           console.log(`\nPertanyaan: ${datas[index].definition}`);
         } else {
           datas[index].mistake++;
