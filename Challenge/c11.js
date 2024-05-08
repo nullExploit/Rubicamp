@@ -7,41 +7,24 @@ const { readFileSync } = require("node:fs"),
   }),
   raw = readFileSync("./data.json"),
   datas = JSON.parse(raw),
-  readlineFunc = () => {
-    console.log(
-      "Selamat datang di permainan Tebak Kata, silahkan isi dengan jawaban yang benar ya!\n"
-    );
-    console.log(`Pertanyaan: ${datas[0].definition}`);
+  read = () => {
+    let ind = 0;
+    console.log(`Pertanyaan: ${datas[ind].definition}`);
     rl.prompt();
     rl.on("line", (ans) => {
-      if (ans.toLowerCase() == datas[0].term) {
+      if (ans.toLowerCase() == datas[ind].term) {
         console.log("Selamat Anda Benar!\n");
-        rl.removeAllListeners();
-        console.log(`Pertanyaan: ${datas[1].definition}`);
-        rl.on("line", (ans) => {
-          if (ans.toLowerCase() == datas[1].term) {
-            console.log("Selamat Anda Benar!\n");
-            rl.removeAllListeners();
-            console.log(`Pertanyaan: ${datas[2].definition}`);
-            rl.on("line", (ans) => {
-              if (ans.toLowerCase() == datas[2].term) {
-                console.log("Selamat Anda Benar!\n");
-                console.log("Hore Anda Menang!");
-                process.exit(0);
-              } else {
-                console.log("Wkwkwkwk, Anda kurang beruntung!\n");
-              }
-              rl.prompt();
-            });
-          } else {
-            console.log("Wkwkwkwk, Anda kurang beruntung!\n");
-          }
-          rl.prompt();
-        });
+        ind++;
+        if (ind === datas.length) {
+          console.log("Hore Anda Menang!");
+          process.exit(0);
+        }
+        console.log(`Pertanyaan: ${datas[ind].definition}`);
       } else {
         console.log("Wkwkwkwk, Anda kurang beruntung!\n");
       }
       rl.prompt();
     });
   };
-readlineFunc();
+
+read();
