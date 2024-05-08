@@ -9,6 +9,9 @@ const { readFileSync } = require("node:fs"),
   datas = JSON.parse(raw),
   read = () => {
     let ind = 0;
+    console.log(
+      "Selamat datang di permainan Tebak Kata, silahkan isi dengan jawaban yang benar ya!\n"
+    );
     console.log(`Pertanyaan: ${datas[ind].definition}`);
     rl.prompt();
     rl.on("line", (ans) => {
