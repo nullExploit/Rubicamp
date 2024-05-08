@@ -19,8 +19,10 @@ Gunakan 'skip' untuk menangguhkan pertanyaannya, dan di akhir pertanyaan akan di
     raw = readFileSync(`./${file}`),
     datas = JSON.parse(raw),
     guessGame = () => {
-      let index = 0,
-        mistake = 0;
+      let index = 0;
+      for (let data of datas) {
+        data.mistake = 0;
+      }
       console.log(`Pertanyaan: ${datas[index].definition}`);
       rl.prompt();
       rl.on("line", (ans) => {
@@ -35,12 +37,12 @@ Gunakan 'skip' untuk menangguhkan pertanyaannya, dan di akhir pertanyaan akan di
           }
         } else if (ans.toLowerCase() == "skip") {
           datas.push(datas.splice(index, 1)[0]);
-          mistake = 0;
+          datas[index].mistake = 0;
           console.log(`\nPertanyaan: ${datas[index].definition}`);
         } else {
-          mistake++;
+          datas[index].mistake++;
           console.log(
-            `\nAnda Kurang Beruntung! anda telah salah ${mistake} kali, silahkan coba lagi.\n`
+            `\nAnda Kurang Beruntung! anda telah salah ${datas[index].mistake} kali, silahkan coba lagi.\n`
           );
         }
         rl.prompt();
