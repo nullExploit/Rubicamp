@@ -71,10 +71,15 @@ $ node todo.js filter:<tag_name>
       }
     },
     tag = () => {
-      if (argv[3]) {
+      if (argv[3] && argv[3] != 0 && argv[3] <= ind) {
         const arg = [...argv],
           input = arg.slice(4);
-        datas[Number(argv[3]) - 1].tags = input;
+        console.log(
+          `Tag '${input}' telah ditambahkan ke daftar '${
+            datas[Number(argv[3]) - 1].task
+          }'`
+        );
+        datas[Number(argv[3]) - 1].tags.push(...input);
         writeFileSync(file, JSON.stringify(datas));
       }
     },
@@ -93,7 +98,7 @@ $ node todo.js filter:<tag_name>
       }
     },
     del = () => {
-      if (argv[3]) {
+      if (argv[3] && argv[3] != 0 && argv[3] <= ind) {
         let log = `'${
           datas[Number(argv[3]) - 1].task
         }' telah dihapus dari daftar`;
@@ -111,14 +116,24 @@ $ node todo.js filter:<tag_name>
       }
     },
     complete = () => {
-      if (argv[3] && !datas[Number(argv[3] - 1)].isComplete) {
+      if (
+        argv[3] &&
+        argv[3] != 0 &&
+        argv[3] <= ind &&
+        !datas[Number(argv[3] - 1)].isComplete
+      ) {
         console.log(`"${datas[Number(argv[3]) - 1].task}" telah selesai.`);
         datas[Number(argv[3]) - 1].isComplete = true;
         writeFileSync(file, JSON.stringify(datas));
       }
     },
     uncomplete = () => {
-      if (argv[3] && datas[Number(argv[3] - 1)].isComplete) {
+      if (
+        argv[3] &&
+        argv[3] != 0 &&
+        argv[3] <= ind &&
+        datas[Number(argv[3] - 1)].isComplete
+      ) {
         console.log(
           `"${datas[Number(argv[3]) - 1].task}" status selesai dibatalkan.`
         );
@@ -127,7 +142,7 @@ $ node todo.js filter:<tag_name>
       }
     },
     task = () => {
-      if (argv[3] && argv[3] == ind) {
+      if (argv[3] && argv[3] != 0 && argv[3] <= ind) {
         console.log(`title: ${datas[Number(argv[3]) - 1].task}`);
         datas[Number(argv[3]) - 1].isComplete
           ? console.log("status: completed")
