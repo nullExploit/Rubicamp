@@ -126,6 +126,17 @@ $ node todo.js filter:<tag_name>
         writeFileSync(file, JSON.stringify(datas));
       }
     },
+    task = () => {
+      if (argv[3] && argv[3] == ind) {
+        console.log(`title: ${datas[Number(argv[3]) - 1].task}`);
+        datas[Number(argv[3]) - 1].isComplete
+          ? console.log("status: completed")
+          : console.log("status: uncompleted");
+        datas[Number(argv[3]) - 1].tags.length
+          ? console.log(`tags: ${datas[Number(argv[3]) - 1].tags}`)
+          : console.log("tags: none");
+      }
+    },
     menu = () => {
       if (argv[2]) {
         switch (argv[2]) {
@@ -149,6 +160,9 @@ $ node todo.js filter:<tag_name>
             break;
           case "uncomplete":
             uncomplete();
+            break;
+          case "task":
+            task();
             break;
           case "tag":
             tag();
