@@ -42,7 +42,7 @@ $ node todo.js filter:<tag_name>
             console.log(`${i + 1}. [ ] ${datas[i].task}.`);
           }
         }
-      }
+      } else console.log("data tidak ditemukan");
     },
     listout = () => {
       if (argv[3] && argv[3] == "asc" && datas.length) {
@@ -80,8 +80,11 @@ $ node todo.js filter:<tag_name>
           }'`
         );
         datas[Number(argv[3]) - 1].tags.push(...input);
+        datas[Number(argv[3]) - 1].tags = [
+          ...new Set(datas[Number(argv[3]) - 1].tags),
+        ];
         writeFileSync(file, JSON.stringify(datas));
-      }
+      } else if (argv[3] > ind) console.log("data tidak ditemukan");
     },
     filter = () => {
       const filtered = argv[2].split(":");
@@ -113,7 +116,7 @@ $ node todo.js filter:<tag_name>
           datas.splice(Number(argv[3]) - 1, 1);
         }
         writeFileSync(file, JSON.stringify(datas));
-      }
+      } else if (argv[3] > ind) console.log("data tidak ditemukan");
     },
     complete = () => {
       if (
@@ -125,7 +128,7 @@ $ node todo.js filter:<tag_name>
         console.log(`"${datas[Number(argv[3]) - 1].task}" telah selesai.`);
         datas[Number(argv[3]) - 1].isComplete = true;
         writeFileSync(file, JSON.stringify(datas));
-      }
+      } else if (argv[3] > ind) console.log("data tidak ditemukan");
     },
     uncomplete = () => {
       if (
@@ -139,7 +142,7 @@ $ node todo.js filter:<tag_name>
         );
         datas[Number(argv[3]) - 1].isComplete = false;
         writeFileSync(file, JSON.stringify(datas));
-      }
+      } else if (argv[3] > ind) console.log("data tidak ditemukan");
     },
     task = () => {
       if (argv[3] && argv[3] != 0 && argv[3] <= ind) {
@@ -150,7 +153,7 @@ $ node todo.js filter:<tag_name>
         datas[Number(argv[3]) - 1].tags.length
           ? console.log(`tags: ${datas[Number(argv[3]) - 1].tags}`)
           : console.log("tags: none");
-      }
+      } else if (argv[3] > ind) console.log("data tidak ditemukan");
     },
     menu = () => {
       if (argv[2]) {
