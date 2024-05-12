@@ -37,13 +37,13 @@ INSERT INTO mahasiswa (tanggal_lahir) VALUES
 SELECT nim, nama, alamat, (strftime('%Y', 'now') - strftime('%Y', tanggal_lahir)) - (strftime('%m-%d', 'now') < strftime('%m-%d', tanggal_lahir)) AS umur FROM mahasiswa GROUP BY nim  HAVING umur < 20;
 
 -- Task 3
-SELECT mahasiswa.nim, mahasiswa.nama, teach.nilai FROM mahasiswa LEFT JOIN teach USING(nim) WHERE nilai='A' OR nilai='B' GROUP BY nim;
+SELECT mahasiswa.nim, mahasiswa.nama, teach.nilai FROM mahasiswa LEFT JOIN teach USING(nim) WHERE nilai='A' OR nilai='B';
 
 -- Task 4
 SELECT mahasiswa.nim, mahasiswa.nama, SUM(mata_kuliah.sks) AS total_sks FROM mahasiswa LEFT JOIN teach USING(nim) LEFT JOIN mata_kuliah USING(id_matkul) GROUP BY nim HAVING total_sks > 10;
 
 -- Task 5
-SELECT mahasiswa.nim, mahasiswa.nama, mata_kuliah.nama_matkul FROM mahasiswa LEFT JOIN teach USING(nim) LEFT JOIN mata_kuliah USING(id_matkul) WHERE nama_matkul='Data Mining';
+SELECT mahasiswa.nim, mahasiswa.nama, mata_kuliah.nama_matkul FROM mahasiswa LEFT JOIN teach USING(nim) LEFT JOIN mata_kuliah USING(id_matkul) WHERE nama_matkul LIKE '%data mining%';
 
 -- Task 6
 SELECT dosen.nip, dosen.nama , COUNT(DISTINCT mahasiswa.nim) AS total_mahasiswa FROM dosen LEFT JOIN teach USING(nip) LEFT JOIN mahasiswa USING(nim) GROUP BY dosen.nama;
