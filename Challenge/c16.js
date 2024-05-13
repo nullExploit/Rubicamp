@@ -16,6 +16,7 @@ class Car {
     this.door = door;
     this.seat = seat;
     this.varian = varian;
+    this.sn = randomUUID();
   }
 }
 
@@ -73,7 +74,7 @@ class CarFactory {
       console.log(`
 no. ${i++}
 varian      : ${car.varian}
-sn          : ${randomUUID()}
+sn          : ${car.sn}
 door        : ${car.door}
 seat        : ${car.seat} seater
 tyre        : ${car.tyre}
