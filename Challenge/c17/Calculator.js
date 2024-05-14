@@ -1,4 +1,4 @@
-export let PI = 22 / 7;
+export const PI = 22 / 7;
 
 class Calculator {
   constructor() {
