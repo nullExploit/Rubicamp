@@ -1,6 +1,6 @@
 let PI = 22 / 7;
 
-class Calculator {
+export class Calculator {
   constructor() {
     this.x = 1;
   }
@@ -41,9 +41,8 @@ class Calculator {
   }
 
   result() {
-    return this.x;
+    console.log(this.x);
   }
 }
 
 export default PI;
-export { Calculator };
