@@ -1,6 +1,6 @@
-let PI = 22 / 7;
+export let PI = 22 / 7;
 
-export class Calculator {
+class Calculator {
   constructor() {
     this.x = 1;
   }
@@ -45,4 +45,4 @@ export class Calculator {
   }
 }
 
-export default PI;
+export default Calculator;

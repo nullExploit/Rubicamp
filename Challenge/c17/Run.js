@@ -1,4 +1,4 @@
-import PI, { Calculator } from "./Calculator.js";
+import Calculator, { PI } from "./Calculator.js";
 
 const calc = new Calculator();
 
