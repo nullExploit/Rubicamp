@@ -1,6 +1,6 @@
 const { writeFileSync, readFileSync, existsSync } = require("fs"),
   file = "todo.json";
-existsSync(`./${file}`) ? toDo() : writeFileSync(file, "[]");
+existsSync(`./${file}`) ? toDo() : writeFileSync(file, "[]"), toDo();
 function toDo() {
   const argv = process.argv,
     raw = readFileSync(`./${file}`),
