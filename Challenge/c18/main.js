@@ -30,7 +30,7 @@ ${line}`);
 
 function username() {
   rl.question("username : ", (ans) => {
-    db.get(`SELECT * FROM users WHERE username='${ans}'`, (err, row) => {
+    db.get("SELECT * FROM users WHERE username=?", [ans], (err, row) => {
       if (err) return console.log("Tolong hubungi administrator!", err);
       else if (!row) {
         console.log("username tidak terdaftar");
@@ -172,7 +172,7 @@ function mahasiswaList() {
 
 function findMahasiswa() {
   rl.question("Masukkan NIM Mahasiswa : ", (ans) => {
-    db.get(`SELECT * FROM mahasiswa WHERE nim='${ans}'`, (err, row) => {
+    db.get("SELECT * FROM mahasiswa WHERE nim=?", [ans], (err, row) => {
       if (err) return console.log("Tolong hubungi administrator!");
       else if (!row) {
         console.log(`Mahasiswa dengan NIM ${ans}, tidak terdaftar`);
@@ -301,7 +301,7 @@ function addCredM(nim, nama, tgl, alm) {
 
 function delMahasiswa() {
   rl.question("Masukkan NIM Mahasiswa : ", (ans) => {
-    db.get(`SELECT * FROM mahasiswa WHERE nim='${ans}'`, (err, row) => {
+    db.get("SELECT * FROM mahasiswa WHERE nim=?", [ans], (err, row) => {
       if (err) return console.log("Tolong hubungi administrator!", err);
       else if (!row) {
         console.log(`Mahasiswa dengan nim ${ans}, tidak terdaftar`);
@@ -370,7 +370,7 @@ function jurusanList() {
 
 function findJurusan() {
   rl.question("Masukkan Kode Jurusan : ", (ans) => {
-    db.get(`SELECT * FROM jurusan WHERE id_jurusan='${ans}'`, (err, row) => {
+    db.get("SELECT * FROM jurusan WHERE id_jurusan=?", [ans], (err, row) => {
       if (err) return console.log("Tolong hubungi administrator!");
       else if (!row) {
         console.log(`Jurusan dengan Kode Jurusan ${ans}, tidak terdaftar`);
@@ -435,7 +435,7 @@ function delJurusan() {
         console.log(`Jurusan dengan Kode Jurusan ${ans}, tidak terdaftar`);
         jurusanMenu();
       } else {
-        db.run(`DELETE FROM jurusan WHERE id_jurusan='${ans}'`);
+        db.run("DELETE FROM jurusan WHERE id_jurusan=?", [ans]);
         console.log(`Data Jurusan ${ans}, telah dihapus`);
         jurusanMenu();
       }
@@ -498,7 +498,7 @@ function dosenList() {
 
 function findDosen() {
   rl.question("Masukkan NIP Dosen : ", (ans) => {
-    db.get(`SELECT * FROM dosen WHERE nip='${ans}'`, (err, row) => {
+    db.get("SELECT * FROM dosen WHERE nip=?", [ans], (err, row) => {
       if (err) return console.log("Tolong hubungi administrator!");
       else if (!row) {
         console.log(`Dosen dengan NIP ${ans}, tidak terdaftar`);
@@ -557,7 +557,7 @@ function addCredD(rows) {
 
 function delDosen() {
   rl.question("Masukkan NIP : ", (ans) => {
-    db.get(`SELECT * FROM dosen WHERE nip='${ans}'`, (err, row) => {
+    db.get("SELECT * FROM dosen WHERE nip=?", [ans], (err, row) => {
       if (err) return console.log("Tolong hubungi administrator!", err);
       else if (!row) {
         console.log(`Dosen dengan NIP ${ans}, tidak terdaftar`);
@@ -702,7 +702,7 @@ function addCredK(rows) {
 
 function delMatkul() {
   rl.question("Masukkan Kode Mata Kuliah : ", (ans) => {
-    db.get(`SELECT * FROM mata_kuliah WHERE id_matkul='${ans}'`, (err, row) => {
+    db.get("SELECT * FROM mata_kuliah WHERE id_matkul=?", [ans], (err, row) => {
       if (err) return console.log("Tolong hubungi administrator!", err);
       else if (!row) {
         console.log(
@@ -824,7 +824,7 @@ function findCon() {
       });
       console.log(table.toString());
       rl.question("Masukkan NIM Mahasiswa : ", (ans) => {
-        db.all(`SELECT * FROM teach WHERE nim='${ans}'`, (err, rows) => {
+        db.all("SELECT * FROM teach WHERE nim=?", [ans], (err, rows) => {
           if (err) return console.log("Tolong hubungi administrator!");
           const table = new Table({
             head: ["ID", "NIM", "Kode Mata Kuliah", "NIP", "Nilai"],
@@ -887,7 +887,7 @@ function addCon() {
 
 function addCredC(sample) {
   rl.question("Masukkan NIM : ", (nim) => {
-    db.get(`SELECT * FROM mahasiswa WHERE nim='${nim}'`, (err, row) => {
+    db.get("SELECT * FROM mahasiswa WHERE nim=?", [nim], (err, row) => {
       if (err) return console.log("Tolong hubungi administrator!", err);
       else if (nim.length != sample) {
         console.log("Panjang NIM tidak sesuai!");
@@ -912,7 +912,8 @@ function addCredC(sample) {
                 addCredC(sample);
               } else {
                 db.get(
-                  `SELECT * FROM mata_kuliah WHERE id_matkul='${mk}'`,
+                  "SELECT * FROM mata_kuliah WHERE id_matkul=?",
+                  [mk],
                   (err, row) => {
                     if (err)
                       return console.log("Tolong hubungi administrator!", err);
@@ -1016,13 +1017,13 @@ function addCredC(sample) {
 
 function delCon() {
   rl.question("Masukkan ID Kontrak : ", (ans) => {
-    db.get(`SELECT * FROM teach WHERE id='${ans}'`, (err, row) => {
+    db.get("SELECT * FROM teach WHERE id=?", [ans], (err, row) => {
       if (err) return console.log("Tolong hubungi administrator!", err);
       else if (!row) {
         console.log(`Kontrak dengan ID ${ans}, tidak terdaftar`);
         conMenu();
       } else {
-        db.run(`DELETE FROM teach WHERE id='${ans}'`);
+        db.run("DELETE FROM teach WHERE id=?", [ans]);
         console.log(`Data Kontrak dengan ID ${ans}, telah dihapus`);
         conMenu();
       }
@@ -1063,7 +1064,7 @@ function upCon() {
         });
         console.log(table.toString());
         rl.question("Masukkan NIM Mahasiswa : ", (nim) => {
-          db.get(`SELECT * FROM mahasiswa WHERE nim='${nim}'`, (err, row) => {
+          db.get("SELECT * FROM mahasiswa WHERE nim=?", [nim], (err, row) => {
             if (err) return console.log("Tolong hubungi administrator!", err);
             else if (!row) {
               console.log(`Mahasiswa dengan NIM ${nim} tidak terdaftar`);
@@ -1109,7 +1110,8 @@ ${line}`);
 function upCont(nim) {
   rl.question("Masukkan ID yang akan diubah nilainya : ", (id) => {
     db.get(
-      `SELECT teach.id, mata_kuliah.nama_matkul, teach.nilai FROM teach LEFT JOIN mata_kuliah USING(id_matkul) WHERE nim='${nim}' AND id='${id}'`,
+      "SELECT teach.id, mata_kuliah.nama_matkul, teach.nilai FROM teach LEFT JOIN mata_kuliah USING(id_matkul) WHERE nim=? AND id=?",
+      [nim, id],
       (err, row) => {
         if (err) return console.log("Tolong hubungi administrator!", err);
         else if (!row) {
