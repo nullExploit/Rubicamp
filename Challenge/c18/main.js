@@ -1074,7 +1074,11 @@ function upCon() {
                     conMenu();
                   } else {
                     rows.forEach((row) => {
-                      table.push([row.id, row.nama_matkul, row.nilai]);
+                      if (!row.nilai) {
+                        table.push([row.id, row.nama_matkul, ""]);
+                      } else {
+                        table.push([row.id, row.nama_matkul, row.nilai]);
+                      }
                     });
                     console.log(`${line}
 Detail mahasiswa dengan NIM '${nim}' :
