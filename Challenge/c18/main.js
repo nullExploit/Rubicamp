@@ -9,6 +9,14 @@ const line = "=".repeat(process.stdout.columns),
   }),
   dbpath = path.join(path.resolve(), "db", "university.db"),
   db = new sqlite3.Database(dbpath);
+rl.on("close", () => {
+  console.log(`
+
+${line}
+Terima kasih
+${line}`);
+  process.exit(0);
+});
 
 main();
 
