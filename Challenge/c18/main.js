@@ -80,8 +80,10 @@ ${line}`);
         conMenu();
         break;
       case "6":
-        console.log("Thank You");
-        process.exit();
+        console.log(`${line}
+Anda telah keluar`);
+        main();
+        break;
       default:
         console.log("Opsi tidak ditemukan, tolong masukkan ulang!");
         mainMenu();
