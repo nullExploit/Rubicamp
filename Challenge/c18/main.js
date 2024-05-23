@@ -276,8 +276,8 @@ function addCredM(nim, nama, tgl, alm) {
         console.log("Panjang Kode Jurusan tidak sesuai!");
         addCredM(nim, nama, tgl, alm);
       } else {
-        for (let row of rows) {
-          if (row.id_jurusan.includes(j)) {
+        db.get("SELECT * FROM jurusan WHERE id_jurusan=?", [j], (err, row) => {
+          if (row) {
             db.run("INSERT INTO mahasiswa VALUES(?, ?, ?, ?, ?)", [
               nim,
               nama,
@@ -293,7 +293,7 @@ function addCredM(nim, nama, tgl, alm) {
               addCredM(nim, nama, tgl, alm)
             );
           }
-        }
+        });
       }
     });
   });
@@ -763,7 +763,7 @@ function conList() {
     head: ["ID", "NIM", "Nama", "Mata Kuliah", "Dosen", "Nilai"],
   });
   db.all(
-    "SELECT teach.id, mahasiswa.nim, mahasiswa.nama, mata_kuliah.nama_matkul, dosen.nama AS nama_dosen, teach.nilai FROM mahasiswa LEFT JOIN teach USING(nim) LEFT JOIN mata_kuliah USING(id_matkul) LEFT JOIN dosen USING(nip) ORDER BY id;",
+    "SELECT teach.id, mahasiswa.nim, mahasiswa.nama, mata_kuliah.nama_matkul, dosen.nama AS nama_dosen, teach.nilai FROM mahasiswa JOIN teach USING(nim) LEFT JOIN mata_kuliah USING(id_matkul) LEFT JOIN dosen USING(nip) ORDER BY id;",
     (err, rows) => {
       if (err) return console.log("Tolong hubungi administrator!", err);
       else if (!rows) console.log("Data tidak ditemukan!");
@@ -835,7 +835,13 @@ function findCon() {
             conMenu();
           } else {
             rows.forEach((row) => {
-              table.push([row.id, row.nim, row.id_matkul, row.nip, row.nilai]);
+              table.push([
+                row.id,
+                row.nim,
+                row.id_matkul,
+                row.nip,
+                row.nilai || "",
+              ]);
             });
             console.log(`Daftar kontrak mahasiswa dengan NIM ${ans} adalah : `);
             console.log(table.toString());
@@ -849,10 +855,10 @@ function findCon() {
 
 function addCon() {
   const table = new Table({
-    head: ["ID", "NIM", "Nama", "Mata Kuliah", "Dosen", "Nilai"],
+    head: ["NIM", "Nama", "Mata Kuliah", "Dosen", "Nilai"],
   });
   db.all(
-    "SELECT teach.id, mahasiswa.nim, mahasiswa.nama, mata_kuliah.nama_matkul, dosen.nama AS nama_dosen, teach.nilai FROM mahasiswa LEFT JOIN teach USING(nim) LEFT JOIN mata_kuliah USING(id_matkul) LEFT JOIN dosen USING(nip) ORDER BY id;",
+    "SELECT mahasiswa.nim, mahasiswa.nama, mata_kuliah.nama_matkul, dosen.nama AS nama_dosen, teach.nilai FROM mahasiswa LEFT JOIN teach USING(nim) LEFT JOIN mata_kuliah USING(id_matkul) LEFT JOIN dosen USING(nip) ORDER BY id;",
     (err, rows) => {
       if (err) return console.log("Tolong hubungi administrator!", err);
       else if (!rows) console.log("Data tidak ditemukan!");
@@ -860,16 +866,14 @@ function addCon() {
         rows.forEach((row) => {
           if (!row.nilai) {
             table.push([
-              row.id,
               row.nim,
               row.nama,
-              row.nama_matkul,
-              row.nama_dosen,
+              row.nama_matkul || "",
+              row.nama_dosen || "",
               "",
             ]);
           } else {
             table.push([
-              row.id,
               row.nim,
               row.nama,
               row.nama_matkul,
@@ -946,56 +950,74 @@ function addCredC(sample) {
                                 );
                                 conMenu();
                               } else {
-                                db.run(
-                                  "INSERT INTO teach (nim, id_matkul, nip) VALUES (?, ?, ?)",
-                                  [nim, mk, nip]
-                                );
-                                console.log("kontrak telah ditambahkan");
-                                const table = new Table({
-                                  head: [
-                                    "ID",
-                                    "NIM",
-                                    "Nama",
-                                    "Mata Kuliah",
-                                    "Dosen",
-                                    "Nilai",
-                                  ],
-                                });
-                                db.all(
-                                  "SELECT teach.id, mahasiswa.nim, mahasiswa.nama, mata_kuliah.nama_matkul, dosen.nama AS nama_dosen, teach.nilai FROM mahasiswa LEFT JOIN teach USING(nim) LEFT JOIN mata_kuliah USING(id_matkul) LEFT JOIN dosen USING(nip) ORDER BY id;",
-                                  (err, rows) => {
+                                db.get(
+                                  "SELECT * FROM teach WHERE nim=? AND nip=? AND id_matkul=?",
+                                  [nim, nip, mk],
+                                  (err, row) => {
                                     if (err)
                                       return console.log(
                                         "Tolong hubungi administrator!",
                                         err
                                       );
-                                    else if (!rows)
-                                      console.log("Data tidak ditemukan!");
-                                    else {
-                                      rows.forEach((row) => {
-                                        if (!row.nilai) {
-                                          table.push([
-                                            row.id,
-                                            row.nim,
-                                            row.nama,
-                                            row.nama_matkul,
-                                            row.nama_dosen,
-                                            "",
-                                          ]);
-                                        } else {
-                                          table.push([
-                                            row.id,
-                                            row.nim,
-                                            row.nama,
-                                            row.nama_matkul,
-                                            row.nama_dosen,
-                                            row.nilai,
-                                          ]);
-                                        }
+                                    else if (row) {
+                                      console.log("Kontrak sudah ada!");
+                                      conMenu();
+                                    } else {
+                                      db.run(
+                                        "INSERT INTO teach (nim, id_matkul, nip) VALUES (?, ?, ?)",
+                                        [nim, mk, nip]
+                                      );
+                                      console.log("kontrak telah ditambahkan");
+                                      const table = new Table({
+                                        head: [
+                                          "ID",
+                                          "NIM",
+                                          "Nama",
+                                          "Mata Kuliah",
+                                          "Dosen",
+                                          "Nilai",
+                                        ],
                                       });
-                                      console.log(table.toString());
+                                      db.all(
+                                        "SELECT teach.id, mahasiswa.nim, mahasiswa.nama, mata_kuliah.nama_matkul, dosen.nama AS nama_dosen, teach.nilai FROM mahasiswa LEFT JOIN teach USING(nim) LEFT JOIN mata_kuliah USING(id_matkul) LEFT JOIN dosen USING(nip) ORDER BY id;",
+                                        (err, rows) => {
+                                          if (err)
+                                            return console.log(
+                                              "Tolong hubungi administrator!",
+                                              err
+                                            );
+                                          else if (!rows)
+                                            console.log(
+                                              "Data tidak ditemukan!"
+                                            );
+                                          else {
+                                            rows.forEach((row) => {
+                                              if (!row.nilai) {
+                                                table.push([
+                                                  row.id,
+                                                  row.nim,
+                                                  row.nama,
+                                                  row.nama_matkul,
+                                                  row.nama_dosen,
+                                                  "",
+                                                ]);
+                                              } else {
+                                                table.push([
+                                                  row.id,
+                                                  row.nim,
+                                                  row.nama,
+                                                  row.nama_matkul,
+                                                  row.nama_dosen,
+                                                  row.nilai,
+                                                ]);
+                                              }
+                                            });
+                                            console.log(table.toString());
+                                          }
+                                          conMenu();
+                                        }
+                                      );
                                     }
-                                    conMenu();
                                   }
                                 );
                               }
