@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+<form action="" method="post" autocomplete="off">
+    <input type="text" class="input" id="name" name="name" value="<%= data.name %>" placeholder="Insert your name" required>
+    <input type="number" class="input" id="height" name="height" value="<%= data.height %>" placeholder="Insert your height" required>
+    <input type="number" step=".001" class="input" id="weight" name="weight" value="<%= data.weight %>" placeholder="Insert your weight" required>
+    <input type="date" class="input" id="birthday" name="birthday" value="<%= data.birthday %>" required>
+    <select class="input" id="isMarried" name="isMarried" required>
+        <option value="" selected>have you married?</option>
+        <option value="true" <%= data.isMarried ? "selected" : "" %>>Yes</option>
+        <option value="false" <%= typeof data.isMarried == "boolean" ? !data.isMarried ? "selected" : "" : ""%>>Not yet</option>
+    </select>
+
+  <button type="submit" class="submit">Save</button>
+</form>
+<a class="cancel" href="/">Cancel</a>
+
+<%- include('partials/footer') %>
